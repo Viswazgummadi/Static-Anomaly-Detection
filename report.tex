@@ -1,0 +1,77 @@
+\documentclass[12pt, a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\geometry{top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm}
+
+\title{\textbf{Credit Card Anomaly Detection: Project Report}}
+\author{Development Team}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\newpage
+
+\section{Introduction}
+This report documents the development and restructuring journey of the Credit Card Anomaly Detection project. The primary objective was to organize an existing codebase into a professional, modular structure, verify its integrity, and enhance its performance using advanced Deep Learning techniques.
+
+\section{Project Restructuring}
+The initial phase involved transforming a flat script-based project into a scalable architecture. The files were organized as follows:
+
+\begin{itemize}
+    \item \textbf{config/}: Centralized configuration (\texttt{config.yaml}) for hyperparameters and paths.
+    \item \textbf{src/}: Core modules including \texttt{data\_loader.py}, \texttt{preprocessor.py}, \texttt{autoencoder.py}, and \texttt{trainer.py}.
+    \item \textbf{models/}: Directory for saving trained artifacts (\texttt{.keras} models and scalers).
+    \item \textbf{Root}: Entry points \texttt{main.py} (training) and \texttt{predict.py} (inference).
+\end{itemize}
+
+\section{Integrity Verification \& Fixes}
+During the initial audit, several critical issues were identified and resolved:
+
+\subsection{Configuration Management}
+The original scripts had hardcoded paths. We introduced a centralized loading mechanism in \texttt{src/utils.py} using \texttt{PyYAML} to ensure consistency across \texttt{main.py} and \texttt{predict.py}.
+
+\subsection{Prediction Pipeline Repair}
+The \texttt{predict.py} script was found to be non-functional due to:
+\begin{enumerate}
+    \item Import errors (referencing non-existent functions).
+    \item Path mismatches (looking for \texttt{.h5} instead of \texttt{.keras}).
+    \item Missing preprocessing (predicting on raw instead of scaled data).
+\end{enumerate}
+These were fixed by rebuilding the script to load the saved \texttt{StandardScaler} and ensuring the input data shape matched the model's expected input dimension (29 features).
+
+\section{Technical Approach}
+
+\subsection{Autoencoder Architecture}
+We utilized an Autoencoder, an unsupervised neural network, to learn the representation of \textit{normal} transactions.
+\begin{itemize}
+    \item \textbf{Encoder}: Compresses input data into a lower-dimensional latent space.
+    \item \textbf{Decoder}: Reconstructs the input from the latent representation.
+    \item \textbf{Loss Function}: Mean Squared Error (MSE). High reconstruction error indicates an anomaly.
+\end{itemize}
+
+\subsection{Efficiency Improvements}
+To improve robustness and detection capability, the following enhancements were implemented:
+\begin{itemize}
+    \item \textbf{Robust Scaling}: Switched from \texttt{StandardScaler} to \texttt{RobustScaler} to handle outliers in the input features effectively.
+    \item \textbf{Regularization}: Added \texttt{Dropout} (0.2) and \texttt{BatchNormalization} layers to prevent overfitting and improve training stability.
+    \item \textbf{Dynamic Thresholding}: Implemented a recall-based strategy to automatically calculate the anomaly threshold, targeting 90\% capture of known fraud cases during evaluation.
+\end{itemize}
+
+\section{Results}
+The system was successfully verified with an end-to-end test.
+\begin{itemize}
+    \item \textbf{Training}: The model converged with decreasing validation loss.
+    \item \textbf{Inference}: The \texttt{predict.py} demo successfully distinguished between normal and fraud samples in a simulated live environment.
+    \item \textbf{Documentation}: A comprehensive \texttt{README.md} and project walkthrough were created to ensure ease of use.
+\end{itemize}
+
+\section{Conclusion}
+The project successfully transitioned from a prototype to a robust, well-structured application. The inclusion of automated integrity checks and sophisticated preprocessing techniques ensures high reliability for future development.
+
+\end{document}

@@ -1,0 +1,22 @@
+# config/config.yaml
+
+paths:
+  raw_data: "data/raw/creditcard.csv"
+  model_save: "models/saved/autoencoder_model.keras"
+  scaler_save: "models/saved/scaler.pkl"
+  plots: "outputs/plots/"
+
+data:
+  test_size: 0.2
+  random_state: 42
+
+model:
+  input_dim: 29  # V1-V28 + Amount
+  encoding_dim: 14
+  hidden_dim: 7
+  learning_rate: 0.001
+
+train:
+  epochs: 50
+  batch_size: 32
+  patience: 10  # For early stopping
