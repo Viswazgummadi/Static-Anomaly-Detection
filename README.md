@@ -13,7 +13,9 @@ This project implements an **Autoencoder Neural Network** to detect anomalies (p
 
 ### Key Features
 - **Autoencoder Architecture**: Compresses and reconstructs input data to learn latent patterns.
-- **Dynamic Thresholding**: Automatically calculates the optimal F1-score threshold for fraud detection.
+- **Robust Preprocessing**: Uses **RobustScaler** to handle outliers effectively.
+- **Advanced Regularization**: Incorporates **Batch Normalization** and **Dropout** for training stability.
+- **Recall-Oriented Thresholding**: Automatically calculates a threshold to target **90% Recall**, ensuring high fraud detection rates.
 - **Live Simulation**: Includes a demo script (`predict.py`) to simulate real-time fraud detection.
 - **Modular Design**: Clean separation of data loading, preprocessing, training, and evaluation logic.
 
@@ -34,15 +36,16 @@ credit-card-anomaly-detection/
 │       └── threshold.txt
 ├── src/                     # 📦 Source Code
 │   ├── modules/
-│   │   ├── autoencoder.py   # Model architecture builder
+│   │   ├── autoencoder.py   # Robust Autoencoder (Dense + BatchNorm + Dropout)
 │   │   ├── data_loader.py   # Data ingestion pipeline
-│   │   ├── preprocessor.py  # Pandas/Scikit-Learn cleanup
-│   │   ├── trainer.py       # Training loop with callbacks
-│   │   └── utils.py         # Metrics, plotting, and helpers
+│   │   ├── preprocessor.py  # RobustScaler integration
+│   │   ├── trainer.py       # Training loop with Callbacks
+│   │   └── utils.py         # Metrics & Plotting
 │   └── __init__.py
 ├── main.py                  # 🚀 Entry point for training
 ├── predict.py               # 🔮 Entry point for inference/demo
 ├── test_data.py             # 🧪 Data integrity check script
+├── report.tex               # 📄 Latex Project Report
 ├── requirements.txt         # 📋 Dependencies list
 └── README.md                # 📄 Project documentation
 ```
@@ -72,9 +75,9 @@ python test_data.py
 ### 2. Model Training
 Train the Autoencoder on normal transactions. This step handles:
 - Data splitting (Train/Test)
-- Normalization (StandardScaler)
+- Normalization (RobustScaler)
 - Model training with Early Stopping
-- Automatic threshold optimization
+- Automatic thresholding (Targeting 90% Recall)
 
 ```bash
 python main.py
