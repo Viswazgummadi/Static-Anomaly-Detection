@@ -9,13 +9,12 @@
 \geometry{top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm}
 
 \title{\textbf{Credit Card Anomaly Detection: Project Report}}
-\author{Development Team}
+\author{Viswaz Gummadi}
 \date{\today}
 
 \begin{document}
 
 \maketitle
-\newpage
 
 \section{Executive Summary}
 This report outlines the end-to-end development of a production-grade Credit Card Anomaly Detection system. The project transformed a basic experimental script into a robust, modular, and scalable software architecture capable of detecting fraudulent transactions with 89\% recall.
@@ -104,6 +103,13 @@ During live simulation, the model successfully flagged obvious fraud but missed 
 To catch this specific fraud, the threshold would need to be lowered to $<$ 0.35. However, doing so would exponentially increase False Alarms, flagging thousands of normal customers (like Transaction \#1). This confirms that a small percentage ($\sim$11\%) of fraud in this dataset mimics normal behavior too closely for this specific architecture to separate without unacceptable operational costs.
 
 \subsection{Risk vs. Reward Strategy}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1.0\textwidth]{outputs/plots/threshold_optimization.png}
+    \caption{Threshold Optimization: Statistical Metric vs. Financial Cost}
+    \label{fig:threshold_opt}
+\end{figure}
+
 The decision to set the threshold at 2.21 represents a strategic choice between statistical optimization and business reality:
 \begin{enumerate}
     \item \textbf{Statistical Optimum (F1-Max)}: Suggested a threshold of $\sim$3.4. This would minimize false alarms further but risks missing more fraud.
